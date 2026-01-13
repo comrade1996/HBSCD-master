@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HBSCD - Hall Booking System Civil Defense</title>
+    <!-- Fonts for English/Arabic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="tailwind-config.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Preload local Noto Kufi font for faster rendering -->
+    <link rel="preload" href="NotoKufiArabic-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="font-sans">
+    <!-- State Indicator - This will change based on hall status -->
+    <div
+      id="hallStatus"
+      class="min-h-screen"
+      role="main"
+      aria-label="Hall status and schedule"
+    >
+      <!-- Transparent Header -->
+      <header class="glass bg-white/5 backdrop-blur-sm fixed py-3 md:py-4 px-2 md:px-4 z-50">
+        <div
+          class="flex flex-col md:flex-row px-2 md:px-6 lg:px-8 justify-between items-start md:items-center"
+        >
+
+        <!-- left Section: Time & Date -->
+          <div class="text-left mt-1 md:mt-2">
+            <div
+              id="currentTime"
+              class="text-xl md:text-3xl lg:text-4xl font-extrabold text-gray-800"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              14:30
+            </div>
+            <div
+              id="currentDate"
+              class="text-xs md:text-sm font-semibold text-gray-600"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              Monday, January 5, 2026
+            </div>
+            <div
+              id="hijriDate"
+              class="text-xs md:text-sm font-semibold text-gray-600"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              6 Rajab 1447 AH
+            </div>
+          </div>
+
+          <!-- right Section: Hall Info -->
+          <div class="text-right md:text-right mt-2 md:mt-0">
+            <h1 class="text-base md:text-xl lg:text-2xl font-bold text-gray-800">
+              Sas Al Nakhl Meeting Room | <span lang="ar" class="arabic">قاعة ساس النخل</span>
+            </h1>
+            <div
+              class="flex items-center mt-0.5 text-xs md:text-sm lg:text-base font-semibold"
+            >
+              <span class="text-gray-600">ADCDA Headquarters | <span lang="ar" class="arabic">المقر الرئيسي لهيئة الدفاع المدني</span></span>
+              <div class="flex items-center mr-2 md:mr-3 rtl:ml-3">
+                <i
+                  class="fas fa-users text-gray-100 ml-4 md:ml-8 text-xs md:text-base"
+                  aria-hidden="true"
+                ></i>
+                <span id="attendeeCount" class="text-gray-700 ml-1">24</span>
+              </div>
+            </div>
+          </div>
+
+          
+        </div>
+      </header>
+
+
+
+      <!-- Main Content -->
+      <main class="pt-16 md:pt-20 pb-32 md:pb-36 lg:pb-40 px-2 md:px-4 flex justify-center items-center relative">
+        <!-- Watermark Logo -->
+        <img src="logo.svg" alt="HBSCD Logo" class="watermark-logo" aria-hidden="true">
+        
+        <div class="w-full max-w-6xl mx-auto relative z-10">
+          <div class="flex flex-col justify-center items-center gap-4 md:gap-6">
+
+            <!-- top Column -->
+            <div class="w-full md:w-1/2 flex flex-col gap-4 md:gap-6">
+              <!-- Left Panel: Hall Status & Next Meeting -->
+              <div class="w-full rounded-xl p-4 md:p-8 lg:p-10">
+                <div class="text-center">
+                  <!-- Pulsing Status Indicator -->
+                  <div class="flex justify-center mb-8 md:mb-12 mt-8 md:mt-14">
+                    <div class="status-pulse-container relative">
+                      <div
+                        id="statusPulse"
+                        class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white flex items-center justify-center relative z-10"
+                      >
+                        <i class="fas fa-check text-green-600 text-xl md:text-2xl"></i>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Status Text -->
+                  <div
+                    id="statusText"
+                    class="text-2xl md:text-4xl lg:text-5xl font-extrabold text-gray-800 mb-0 mt-2 md:mt-4"
+                  >
+                    Available | <span lang="ar" class="arabic">متـــــــاح</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- middle Column -->
+           
+            <div
+              id="nextMeetingCard"
+              class="w-full md:w-[80%] lg:w-[70%] bg-white/5 backdrop-blur-sm rounded-lg border border-2 border-dashed border-white/20 p-3 md:p-5 lg:p-6 text-center"
+            >
+              <div class="text-lg md:text-xl lg:text-2xl font-semibold text-gray-800 mb-2">
+                Next Meeting | <span lang="ar" class="arabic">الاجتماع القادم</span>
+              </div>
+              <div id="nextMeetingTitle" class="text-gray-700 mb-2 text-base md:text-lg lg:text-xl">
+                Emergency Response Planning | <span lang="ar" class="arabic">تخطيط الاستجابة للطوارئ</span>
+              </div>
+              <div class="flex items-center text-center justify-center gap-2">
+                <i class="fas fa-clock text-gray-100 mr-2 md:mr-4 text-sm md:text-md"></i>
+                <span id="nextMeetingTime" class="text-gray-700 text-sm md:text-base lg:text-lg">Starts at 15:00 | <span lang="ar" class="arabic">يبدأ الساعة 15:00</span></span>
+              </div>
+
+              <!-- Amenities (inline inside Next Meeting) -->
+              <div class="next-amenities mt-3 md:mt-4">
+                <div class="flex justify-center gap-2 md:gap-3 w-full max-w-4xl mx-auto px-2 md:px-4">
+                  <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-blue-100 flex items-center justify-center" title="Projector | جهاز عرض">
+                    <i class="fas fa-video text-blue-600 text-xs md:text-sm"></i>
+                  </div>
+                  <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-green-100 flex items-center justify-center" title="Whiteboard | سبورة بيضاء">
+                    <i class="fas fa-chalkboard text-green-600 text-xs md:text-sm"></i>
+                  </div>
+                  <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-purple-100 flex items-center justify-center" title="Video Conference | مؤتمر فيديو">
+                    <i class="fas fa-video text-purple-600 text-xs md:text-sm"></i>
+                  </div>
+                  <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-yellow-100 flex items-center justify-center" title="Large Screen | شاشة كبيرة">
+                    <i class="fas fa-desktop text-yellow-600 text-xs md:text-sm"></i>
+                  </div>
+                  <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-indigo-100 flex items-center justify-center" title="WiFi | واي فاي">
+                    <i class="fas fa-wifi text-indigo-600 text-xs md:text-sm"></i>
+                  </div>
+                  <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-red-100 flex items-center justify-center" title="Audio System | نظام الصوت">
+                    <i class="fas fa-volume-up text-red-600 text-xs md:text-sm"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+           
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer Carousel -->
+      <footer
+        class="fixed bottom-0 left-0 right-0 bg-white/5 backdrop-blur-sm py-1 mx-2 md:mx-3 mb-1 md:mb-2 rounded-t-xl"
+      >
+        <div class="px-2 md:px-3 lg:px-4 mx-auto">
+          <h3 class="text-xs md:text-sm font-bold mb-1 md:mb-2 text-center">
+            Today's Meetings | <span lang="ar" class="arabic">اجتماعات اليوم</span>
+          </h3>
+
+          <div
+            id="carousel"
+            class="embla"
+            role="region"
+            aria-label="Today's Meetings"
+          >
+            <div class="embla__viewport overflow-hidden">
+              <div id="carouselInner" class="embla__container flex" role="list">
+                <!-- Meeting Items will be generated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="floating-buttons">
+      <button id="statusToggleBtn" class="status-toggle-btn" aria-label="Change status" title="Cycle status (Available → Engaged → Starting Soon)">
+        <i class="fas fa-sync-alt" aria-hidden="true"></i>
+      </button>
+      <button id="fullscreenBtn" class="fullscreen-btn" aria-label="Toggle fullscreen" title="Toggle fullscreen (F11)">
+        <i class="fas fa-expand" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <script src="embla/embla-carousel.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

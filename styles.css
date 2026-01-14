@@ -47,9 +47,9 @@ body {
 header.glass {
     /* background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.5));
     backdrop-filter: blur(10px); */
-    margin: 0.5rem 1rem;
-    border-radius: 0.75rem;
-    width: calc(100% - 2rem);
+    margin: 0;
+    border-radius: 0;
+    width: 100%;
 }
 
 /* Responsive header adjustments */
@@ -76,6 +76,29 @@ header.glass {
     }
     header .text-2xl {
         font-size: 1.5rem !important;
+    }
+}
+
+/* 976x610 header adjustments */
+@media (min-width: 900px) and (max-width: 1100px) and (min-height: 550px) and (max-height: 650px) and (orientation: landscape) {
+    header.glass {
+        margin: 0.25rem 0.5rem;
+        width: calc(100% - 1rem);
+    }
+    header .text-xl {
+        font-size: 1.125rem !important;
+    }
+    header .text-2xl {
+        font-size: 1.25rem !important;
+    }
+    header .text-base {
+        font-size: 0.875rem !important;
+    }
+    header .text-sm {
+        font-size: 0.75rem !important;
+    }
+    header .text-xs {
+        font-size: 0.6875rem !important;
     }
 }
 /* Watermark Logo */
@@ -128,6 +151,13 @@ header.glass {
     }
 }
 
+/* 976x610 section gaps */
+@media (min-width: 900px) and (max-width: 1100px) and (min-height: 550px) and (max-height: 650px) and (orientation: landscape) {
+    .flex.flex-col.justify-center.items-center {
+        gap: 0.625rem !important;
+    }
+}
+
 /* Fullscreen mode enhancements */
 .fullscreen-mode {
     padding: 2.5rem 3rem !important;
@@ -174,20 +204,14 @@ header.glass {
 @media (max-width: 639px) {
     main {
         padding-top: 4.5rem !important;
-        padding-bottom: 9rem !important;
+        padding-bottom: 10rem !important;
     }
 }
 
 @media (min-width: 640px) and (max-width: 1023px) {
     main {
         padding-top: 5rem !important;
-        padding-bottom: 9.5rem !important;
-    }
-}
-
-@media (min-width: 1024px) {
-    main {
-        padding-bottom: 10rem !important;
+        padding-bottom: 11rem !important;
     }
 }
 
@@ -211,6 +235,20 @@ header.glass {
     header.glass {
         padding-top: 0.625rem !important;
         padding-bottom: 0.625rem !important;
+    }
+}
+
+/* 976x610 resolution adjustments */
+@media (min-width: 900px) and (max-width: 1100px) and (min-height: 550px) and (max-height: 650px) and (orientation: landscape) {
+    main {
+        padding-top: 3.5rem !important;
+        padding-bottom: 7.5rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    header.glass {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
     }
 }
 
@@ -281,6 +319,37 @@ header.glass {
     }
     #nextMeetingCard .text-base {
         font-size: 0.875rem !important;
+    }
+}
+
+/* 976x610 next meeting card adjustments */
+@media (min-width: 900px) and (max-width: 1100px) and (min-height: 550px) and (max-height: 650px) and (orientation: landscape) {
+    #nextMeetingCard {
+        padding: 0.5rem 0.75rem !important;
+        margin-top: 0.5rem !important;
+    }
+    #nextMeetingCard .text-lg {
+        font-size: 0.875rem !important;
+    }
+    #nextMeetingCard .text-base {
+        font-size: 0.8125rem !important;
+    }
+    #nextMeetingCard .text-sm {
+        font-size: 0.75rem !important;
+    }
+    .next-amenities {
+        margin-top: 0.375rem !important;
+    }
+    .next-amenities .gap-2 {
+        gap: 0.375rem !important;
+    }
+    .next-amenities .w-7,
+    .next-amenities .w-8 {
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+    }
+    .next-amenities i {
+        font-size: 0.625rem !important;
     }
 }
 /* Pulsating rings animation for status indicator */
@@ -362,6 +431,26 @@ header.glass {
     }
 }
 
+/* 976x610 status adjustments */
+@media (min-width: 900px) and (max-width: 1100px) and (min-height: 550px) and (max-height: 650px) and (orientation: landscape) {
+    #statusPulse {
+        width: 4rem !important;
+        height: 4rem !important;
+    }
+    #statusPulse i {
+        font-size: 1.25rem !important;
+    }
+    #statusText {
+        font-size: clamp(1.5rem, 2.2vw, 2.5rem) !important;
+    }
+    .w-full.rounded-xl {
+        padding: 0.75rem 1rem !important;
+    }
+    .flex.justify-center.mb-8 {
+        margin-bottom: 1rem !important;
+    }
+}
+
 @keyframes pulse-ring {
     0% {
         transform: translate(-50%, -50%) scale(0.8);
@@ -398,7 +487,7 @@ footer {
     border-radius: 1rem 1rem 0 0; 
     border: 1px solid rgba(255,255,255,0.06);
     z-index: 40;
-    padding: 0.5rem 0 0.75rem 0;
+    padding: 0.75rem 0 1rem 0;
 }
 
 /* Responsive footer padding */
@@ -427,11 +516,11 @@ footer {
 /* Embla carousel base styles - integrated from embla folder */
 .embla {
   margin: auto;
-  --slide-height: 8.5rem;
-  --slide-spacing: 0.75rem;
+  --slide-height: 10rem;
+  --slide-spacing: 1rem;
   --slide-size: 100%;
   position: relative;
-  padding: 0.375rem;
+  padding: 0.5rem;
   overflow: hidden;
 }
 
@@ -498,11 +587,11 @@ footer {
 
 /* Carousel item padding and spacing enhancement */
 .carousel-item { 
-  padding: 0.625rem 0.75rem; 
+  padding: 0.875rem 1rem; 
   height: 100%;
   user-select: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  min-height: 7rem;
+  min-height: 8rem;
 }
 
 .carousel-item:hover {
@@ -544,12 +633,8 @@ footer {
 @media (min-width: 1024px) and (max-width: 1279px) {
     .embla {
         --slide-size: 32%;
-        --slide-spacing: 0.875rem;
-        --slide-height: 8.5rem;
-    }
-    .carousel-item {
-        padding: 0.75rem 0.875rem;
-        min-height: 7.5rem;
+        --slide-spacing: 1rem;
+        --slide-height: 10rem;
     }
 }
 
@@ -557,12 +642,8 @@ footer {
 @media (min-width: 1280px) {
     .embla {
         --slide-size: calc(33.333% - var(--slide-spacing) * 2 / 3);
-        --slide-spacing: 1rem;
-        --slide-height: 9rem;
-    }
-    .carousel-item {
-        padding: 0.875rem 1rem;
-        min-height: 8rem;
+        --slide-spacing: 1.25rem;
+        --slide-height: 10.5rem;
     }
 }
 
@@ -594,32 +675,46 @@ footer {
         min-height: 7rem;
     }
 }
+
+/* Specific breakpoint for 976x610 and similar tablet landscape resolutions */
+@media (min-width: 900px) and (max-width: 1100px) and (min-height: 550px) and (max-height: 650px) and (orientation: landscape) {
+    .embla {
+        --slide-size: 31%;
+        --slide-spacing: 0.75rem;
+        --slide-height: 6.5rem;
+    }
+    .carousel-item {
+        padding: 0.5rem 0.625rem;
+        font-size: 0.75rem;
+        min-height: 6rem;
+    }
+}
 /* Embla autoscroll progress bar - from embla folder */
 .embla__progress {
   border-radius: 0.5rem;
   background-color: rgba(255, 255, 255, 0.1);
   position: relative;
-  height: 0.3rem;
+  height: 0.4rem;
   width: 100%;
-  max-width: 250px;
-  margin: 0.5rem auto 0;
+  max-width: 300px;
+  margin: 0.75rem auto 0;
   overflow: hidden;
 }
 
 /* Responsive progress bar */
 @media (max-width: 639px) {
     .embla__progress {
-        max-width: 180px;
-        height: 0.25rem;
-        margin: 0.375rem auto 0;
+        max-width: 200px;
+        height: 0.3rem;
+        margin: 0.5rem auto 0;
     }
 }
 
 @media (min-width: 640px) and (max-width: 1023px) {
     .embla__progress {
-        max-width: 200px;
-        height: 0.3rem;
-        margin: 0.5rem auto 0;
+        max-width: 250px;
+        height: 0.35rem;
+        margin: 0.625rem auto 0;
     }
 }
 
@@ -652,6 +747,18 @@ footer {
     }
 }
 
+/* 976x610 footer adjustments */
+@media (min-width: 900px) and (max-width: 1100px) and (min-height: 550px) and (max-height: 650px) and (orientation: landscape) {
+    footer {
+        padding: 0.25rem 0 0.5rem 0;
+        margin-bottom: 0.25rem !important;
+    }
+    footer h3 {
+        font-size: 0.8125rem !important;
+        margin-bottom: 0.375rem !important;
+    }
+}
+
 .embla__progress__bar {
   background-color: rgba(255, 255, 255, 0.5);
   position: absolute;
@@ -675,60 +782,39 @@ footer {
 
 /* Responsive carousel text */
 .carousel-item .text-yellow-400 {
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-weight: 800;
-    line-height: 1.3;
 }
 
 .carousel-item .mt-1 {
-    font-size: 0.875rem;
-    line-height: 1.3;
+    font-size: 1rem;
 }
 
 .carousel-item .mt-2 {
-    font-size: 0.8125rem;
-    line-height: 1.3;
+    font-size: 0.875rem;
 }
 
 @media (max-width: 639px) {
     .carousel-item .text-yellow-400 {
-        font-size: 0.8125rem;
-        line-height: 1.25;
+        font-size: 0.875rem;
     }
     .carousel-item .mt-1 {
-        font-size: 0.8125rem;
-        line-height: 1.25;
+        font-size: 0.875rem;
     }
     .carousel-item .mt-2 {
         font-size: 0.75rem;
-        line-height: 1.25;
     }
 }
 
 @media (min-width: 640px) and (max-width: 1023px) {
     .carousel-item .text-yellow-400 {
-        font-size: 0.8125rem;
-        line-height: 1.3;
-    }
-    .carousel-item .mt-1 {
-        font-size: 0.8125rem;
-        line-height: 1.3;
-    }
-    .carousel-item .mt-2 {
-        font-size: 0.75rem;
-        line-height: 1.3;
-    }
-}
-
-@media (min-width: 1024px) {
-    .carousel-item .text-yellow-400 {
         font-size: 0.9375rem;
     }
     .carousel-item .mt-1 {
         font-size: 0.9375rem;
     }
     .carousel-item .mt-2 {
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
     }
 }
 
@@ -762,8 +848,177 @@ footer {
     }
 }
 
+/* 976x610 carousel text adjustments */
+@media (min-width: 900px) and (max-width: 1100px) and (min-height: 550px) and (max-height: 650px) and (orientation: landscape) {
+    .carousel-item .text-yellow-400 {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.125rem;
+        line-height: 1.2;
+    }
+    .carousel-item .mt-1 {
+        font-size: 0.75rem !important;
+        margin-top: 0.25rem !important;
+        line-height: 1.15;
+    }
+    .carousel-item .mt-2 {
+        font-size: 0.6875rem !important;
+        margin-top: 0.25rem !important;
+        line-height: 1.2;
+    }
+}
+
 /* Remove shadows from cards/components (explicit utility fallback) */
 .shadow-sm, .shadow-lg, .shadow { box-shadow: none !important; }
+
+/* Modern Meetings Table Styles */
+.meetings-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.meetings-table thead {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.meetings-table th {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1rem;
+  white-space: nowrap;
+}
+
+.meetings-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.meetings-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(2px);
+}
+
+.meetings-table tbody tr.current-meeting {
+  background: rgba(255, 255, 255, 0.15);
+  border-left: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+.meetings-table td {
+  padding: 0.875rem 1rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.meetings-table .time-cell {
+  font-weight: 700;
+  color: #fbbf24;
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+.meetings-table .meeting-cell {
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.meetings-table .attendees-cell {
+  text-align: center;
+  font-weight: 600;
+  min-width: 60px;
+}
+
+/* Responsive table */
+@media (max-width: 639px) {
+  .meetings-table th,
+  .meetings-table td {
+    padding: 0.5rem 0.625rem;
+    font-size: 0.75rem;
+  }
+  
+  .meetings-table .time-cell {
+    min-width: 80px;
+  }
+  
+  .meetings-table .attendees-cell {
+    min-width: 50px;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .meetings-table th,
+  .meetings-table td {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Meetings vertical carousel container */
+.meetings-scroll {
+  position: relative;
+  /* default: static scroll inside the table - use class .auto to enable continuous autoplay */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  min-height: 0; /* Important for flex-1 to work properly */
+}
+
+/* Add the .auto class to enable continuous automated scrolling (overflow hidden required) */
+.meetings-scroll.auto,
+.meetings-scroll.auto-scroll {
+  overflow: hidden;
+}
+
+/* Make tbody block so we can translate it independently while keeping the header fixed */
+.meetings-table thead,
+.meetings-table tbody {
+  display: block;
+}
+
+.meetings-table thead tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.meetings-table tbody tr {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+
+/* Status-aware table header (non-transparent solid background matching current status) */
+.meetings-table thead th {
+  background-color: var(--status-header-bg);
+  color: var(--status-header-color);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Smooth transform for the scrolling body */
+.meetings-table tbody {
+  transform: translateY(0);
+  will-change: transform;
+}
+
+/* Default row height variable (can be overridden by JS) */
+:root { --meeting-row-height: 3.5rem; --status-header-bg: #10b981; --status-header-color: #ffffff; }
+
+/* Set container to show 7 rows by default */
+.meetings-scroll.show-7-rows {
+  max-height: calc(var(--meeting-row-height) * 7);
+  height: 100%; /* Fill available space but respect max-height */
+}
+
+@media (max-width: 639px) {
+  :root { --meeting-row-height: 2.8rem; }
+  .meetings-scroll.show-7-rows { max-height: calc(var(--meeting-row-height) * 7); }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  :root { --meeting-row-height: 3.2rem; }
+  .meetings-scroll.show-7-rows { max-height: calc(var(--meeting-row-height) * 7); }
+}
 
 /* Floating buttons container (right middle) */
 .floating-buttons {

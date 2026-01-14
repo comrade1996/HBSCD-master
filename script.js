@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${parts[0]} | <span lang="ar" class="arabic">${parts[1]}</span>`;
     }
 
-    // Meeting data for carousel
+    // Meeting data for table display
     const meetings = [
         { time: '09:00 - 10:30', title: 'Emergency Response Training | تدريب الاستجابة للطوارئ', attendees: 18 },
         { time: '11:00 - 12:00', title: 'Fire Safety Workshop | ورشة عمل السلامة من الحرائق', attendees: 24 },
@@ -64,167 +64,129 @@ document.addEventListener('DOMContentLoaded', () => {
         { time: '18:30 - 19:30', title: 'Volunteer Coordination | تنسيق المتطوعين', attendees: 30 }
     ];
     
-    // Generate carousel items (tripled for seamless continuous loop)
-    const carouselInner = document.getElementById('carouselInner');
-    const createMeetingItem = (meeting) => {
-        const meetingItem = document.createElement('div');
-        // Using embla__slide class from integrated embla folder structure
-        meetingItem.className = 'embla__slide carousel-item flex-shrink-0 bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl text-center';
-        meetingItem.innerHTML = `
-            <div class="text-yellow-400 font-extrabold text-base">${meeting.time}</div>
-            <div class="mt-1 text-base font-medium">${formatBilingual(meeting.title)}</div>
-            <div class="mt-2 flex items-center justify-center text-sm">
-                <i class="fas fa-users mr-2 text-xs" aria-hidden="true"></i>
-                <span>${meeting.attendees} attendees</span>
-            </div>
-        `;
-        meetingItem.setAttribute('role', 'listitem');
-        meetingItem.setAttribute('aria-label', `${meeting.time} — ${meeting.title} — ${meeting.attendees} attendees`);
-        return meetingItem;
-    };
-    
-    // Create three copies of the carousel for seamless loop
-    for (let i = 0; i < 3; i++) {
+    // Generate table rows for meetings
+    const meetingsTableBody = document.getElementById('meetingsTableBody');
+    if (meetingsTableBody) {
         meetings.forEach(meeting => {
-            carouselInner.appendChild(createMeetingItem(meeting));
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="time-cell">${meeting.time}</td>
+                <td class="meeting-cell">${formatBilingual(meeting.title)}</td>
+                <td class="attendees-cell">${meeting.attendees}</td>
+            `;
+            meetingsTableBody.appendChild(row);
         });
-    }
-    
-    // Initialize Embla carousel (with continuous marquee autoscroll)
-    let embla;
-    const emblaViewport = document.querySelector('.embla__viewport');
-    const emblaRoot = document.querySelector('.embla');
-    
-    // Create progress bar for autoscroll
-    const progressBar = document.createElement('div');
-    progressBar.className = 'embla__progress';
-    progressBar.innerHTML = '<div class="embla__progress__bar"></div>';
-    emblaRoot.appendChild(progressBar);
-    const progressBarInner = progressBar.querySelector('.embla__progress__bar');
-    
-    if (typeof EmblaCarousel === 'function' && emblaViewport) {
-        embla = EmblaCarousel(emblaViewport, { 
-            containScroll: false,
-            align: 'start', 
-            loop: true, 
-            speed: 20,
-            dragFree: false,
-            inViewThreshold: 0
+        
+        // Highlight current meeting based on time (optional feature)
+        const now = new Date();
+        const currentTime = now.getHours() * 60 + now.getMinutes();
+        
+        const rows = meetingsTableBody.querySelectorAll('tr');
+        rows.forEach(row => {
+            const timeCell = row.querySelector('.time-cell').textContent;
+            const [startTime] = timeCell.split(' - ');
+            const [startHour, startMin] = startTime.split(':').map(Number);
+            const meetingStart = startHour * 60 + startMin;
+            
+            // Check if current time is within 30 minutes of this meeting
+            if (currentTime >= meetingStart - 30 && currentTime <= meetingStart + 90) {
+                row.classList.add('current-meeting');
+            }
         });
 
-        // Continuous marquee autoscroll (right to left)
-        let autoScrollAnimation = null;
-        let isHovered = false;
-        const SCROLL_SPEED = -1.5; // pixels per frame (negative for right-to-left)
-        const slides = embla.slideNodes();
-        const slideCount = slides.length / 3; // We have 3 copies
-        
-        const animate = () => {
-            if (!isHovered && embla) {
-                const engine = embla.internalEngine();
-                let target = engine.location.get() + SCROLL_SPEED;
-                
-                // Seamless loop: reset when we scroll past the first set
-                const slideWidth = slides[0].offsetWidth + parseFloat(getComputedStyle(slides[0].parentElement).gap);
-                const resetPoint = -slideWidth * slideCount;
-                const maxPoint = slideWidth * slideCount;
-                
-                if (target < resetPoint) {
-                    target = target + (slideWidth * slideCount);
-                } else if (target > maxPoint) {
-                    target = target - (slideWidth * slideCount);
+        // --- Continuous vertical carousel logic (shows 5 rows) ---
+        (function initMeetingsAutoScroll() {
+            const table = document.querySelector('.meetings-table');
+            const tbody = meetingsTableBody;
+            // Find the wrapper with class .meetings-scroll (we added it in HTML) - ensures correct overflow handling
+            const container = tbody.closest('.meetings-scroll');
+
+            if (!table || !tbody || !container) return;
+
+            // Ensure at least 8 rows exist (clone if necessary) to make smooth continuous scroll
+            const desiredVisible = 7;
+            const originalRows = Array.from(tbody.children);
+            while (tbody.children.length < Math.max(desiredVisible + 1, originalRows.length)) {
+                originalRows.forEach(r => tbody.appendChild(r.cloneNode(true)));
+            }
+
+            // Compute row height from first row
+            const firstRow = tbody.querySelector('tr');
+            const rowHeight = firstRow.getBoundingClientRect().height || 40;
+
+            // Set CSS variable to match computed row height so container can show exactly 7 rows
+            document.documentElement.style.setProperty('--meeting-row-height', `${rowHeight}px`);
+            container.classList.add('meetings-scroll', 'show-7-rows');
+
+            // Enable auto-scroll by default
+            container.classList.add('auto-scroll');
+            container.classList.remove('static');
+
+            // Auto scroll state
+            let offset = 0;
+            let lastTime = performance.now();
+            const SPEED_PX_PER_SEC = 25; // adjust scroll speed (px/s)
+            let running = true;
+            let pauseTimeout = null;
+            const PAUSE_AFTER_INTERACTION_MS = 3000;
+
+            // Helper to pause temporarily (e.g., when user scrolls or interacts)
+            function pauseTemporarily(ms = PAUSE_AFTER_INTERACTION_MS) {
+                running = false;
+                if (pauseTimeout) clearTimeout(pauseTimeout);
+                pauseTimeout = setTimeout(() => {
+                    running = true;
+                    lastTime = performance.now();
+                    requestAnimationFrame(step);
+                }, ms);
+            }
+
+            // Pause on hover/focus (keep immediate pause)
+            container.addEventListener('mouseenter', () => { running = false; });
+            container.addEventListener('mouseleave', () => { running = true; lastTime = performance.now(); requestAnimationFrame(step); });
+            container.addEventListener('focusin', () => { running = false; });
+            container.addEventListener('focusout', () => { running = true; lastTime = performance.now(); requestAnimationFrame(step); });
+
+            // Pause when user attempts interaction (wheel/touch/pointer) and resume after a short idle period
+            container.addEventListener('wheel', (e) => {
+                pauseTemporarily();
+            }, { passive: true });
+            container.addEventListener('touchstart', () => { pauseTemporarily(); }, { passive: true });
+            container.addEventListener('pointerdown', () => { pauseTemporarily(); });
+
+
+
+            // Ensure we have at least one full duplicate set to loop smoothly
+            function ensureLoopable() {
+                const rows = tbody.children.length;
+                if (rows < desiredVisible * 2) {
+                    const current = Array.from(tbody.children);
+                    current.forEach(r => tbody.appendChild(r.cloneNode(true)));
                 }
-                
-                engine.location.set(target);
-                engine.translate.to(engine.location);
-                engine.animation.proceed();
             }
-            autoScrollAnimation = requestAnimationFrame(animate);
-        };
-        
-        // Start continuous animation
-        autoScrollAnimation = requestAnimationFrame(animate);
-        
-        const startAutoplay = () => { 
-            isHovered = false;
-            progressBarInner.style.animationPlayState = 'running';
-        };
-        
-        const stopAutoplay = () => { 
-            isHovered = true;
-            progressBarInner.style.animationPlayState = 'paused';
-        };
+            ensureLoopable();
 
-        emblaRoot.addEventListener('mouseenter', stopAutoplay);
-        emblaRoot.addEventListener('mouseleave', startAutoplay);
-        emblaRoot.addEventListener('focusin', stopAutoplay);
-        emblaRoot.addEventListener('focusout', startAutoplay);
+            function step(now) {
+                if (!running) { lastTime = now; return; }
+                const dt = (now - lastTime) / 1000; // seconds
+                lastTime = now;
+                offset += SPEED_PX_PER_SEC * dt;
 
-        // Continuous progress bar animation (20 seconds for full cycle)
-        progressBarInner.style.animationDuration = '5s';
-        progressBarInner.style.animationPlayState = 'running';
+                if (offset >= rowHeight) {
+                    // Move first row to end and reduce offset
+                    const first = tbody.firstElementChild;
+                    if (first) tbody.appendChild(first);
+                    offset -= rowHeight;
+                }
 
-        // Re-init on resize (debounced) to ensure loop clones and snap positions are correct
-        let resizeTimer = null;
-        window.addEventListener('resize', () => {
-            if (resizeTimer) clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                try { embla.reInit(); } catch (e) { /* ignore */ }
-            }, 150);
-        });
+                // Apply transform
+                tbody.style.transform = `translateY(-${offset}px)`;
+                requestAnimationFrame(step);
+            }
 
-        // Ensure proper init after layout (in case fonts or rendering shifted sizes)
-        setTimeout(() => { try { embla.reInit(); } catch (e) {} }, 200);
-        
-        // Navigation - Keyboard nav with autoscroll pause/resume
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') { 
-                stopAutoplay(); 
-                embla.scrollPrev(); 
-                setTimeout(startAutoplay, 2000);
-            }
-            if (e.key === 'ArrowRight') { 
-                stopAutoplay(); 
-                embla.scrollNext(); 
-                setTimeout(startAutoplay, 2000);
-            }
-        });
-
-        // Set active class on init and on select
-        const updateActive = () => {
-            try {
-                const slidesInView = embla.slidesInView();
-                document.querySelectorAll('.carousel-item').forEach((item, i) => {
-                    if (slidesInView.indexOf(i) !== -1) item.classList.add('active'); else item.classList.remove('active');
-                });
-            } catch (err) {
-                const selected = embla.selectedScrollSnap();
-                const slides = embla.slideNodes();
-                const visible = slides.length ? Math.max(1, Math.round(embla.containerNode().getBoundingClientRect().width / slides[0].getBoundingClientRect().width)) : 1;
-                document.querySelectorAll('.carousel-item').forEach((item, i) => {
-                    if (i >= selected && i < selected + visible) item.classList.add('active'); else item.classList.remove('active');
-                });
-            }
-        };
-        embla.on('select', updateActive);
-        embla.on('init', updateActive);
-    } else {
-        // Fallback: rotate slides by moving first child to the end (looping)
-        let fallbackTimer = setInterval(() => {
-            const container = document.getElementById('carouselInner');
-            if (!container || !container.firstElementChild) return;
-            container.appendChild(container.firstElementChild);
-        }, 3500);
-        window.addEventListener('keydown', (e) => {
-            const container = document.getElementById('carouselInner');
-            if (!container) return;
-            if (e.key === 'ArrowLeft') {
-                container.insertBefore(container.lastElementChild, container.firstElementChild);
-            }
-            if (e.key === 'ArrowRight') {
-                container.appendChild(container.firstElementChild);
-            }
-        });
+            // Kick off animation
+            requestAnimationFrame(step);
+        })();
     }
 
     // Set initial hall status to Available
@@ -240,7 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 pulseColor: 'bg-green-600',
                 bodyBg: 'linear-gradient(135deg, #10b981 0%, #059669 15%, #047857 30%, #10b981 45%, #065f46 60%, #047857 75%, #064e3b 90%, #10b981 100%)',
                 textColor: '#ffffff',
-                fadeColor: 'rgba(16, 185, 129, 0.35)'
+                fadeColor: 'rgba(16, 185, 129, 0.35)',
+                headerBg: '#10b981'
             },
             engaged: {
                 text: 'Engaged | <span lang="ar" class="arabic">مشغول</span>',
@@ -248,7 +211,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 pulseColor: 'bg-red-500',
                 bodyBg: 'linear-gradient(135deg, #ef4444 0%, #dc2626 15%, #b91c1c 30%, #ef4444 45%, #991b1b 60%, #dc2626 75%, #7f1d1d 90%, #ef4444 100%)',
                 textColor: '#ffffff',
-                fadeColor: 'rgba(239, 68, 68, 0.35)'
+                fadeColor: 'rgba(239, 68, 68, 0.35)',
+                headerBg: '#ef4444'
             },
             upcoming: {
                 text: 'Starting&nbsp;Soon&nbsp;| <span lang="ar" class="arabic ">يبدأ&nbsp;قريباً</span>',
@@ -256,7 +220,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 pulseColor: 'bg-orange-400',
                 bodyBg: 'linear-gradient(135deg, #fb923c 0%, #f97316 15%, #ea580c 30%, #fb923c 45%, #c2410c 60%, #f97316 75%, #9a3412 90%, #fb923c 100%)',
                 textColor: '#ffffff',
-                fadeColor: 'rgba(251, 146, 60, 0.35)'
+                fadeColor: 'rgba(251, 146, 60, 0.35)',
+                headerBg: '#fb923c'
             }
         };
 
@@ -269,6 +234,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.background = s.bodyBg;
         document.body.style.backgroundSize = '400% 400%';
         document.body.style.color = s.textColor;
+
+        // Update status-aware table header colors (solid, non-transparent)
+        document.documentElement.style.setProperty('--status-header-bg', s.headerBg || '#10b981');
+        document.documentElement.style.setProperty('--status-header-color', s.textColor || '#ffffff');
 
         // Keep hall container transparent so body gradient shows through
         const hall = document.getElementById('hallStatus');

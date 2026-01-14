@@ -970,22 +970,33 @@ footer {
   overflow: hidden;
 }
 
-/* Make tbody block so we can translate it independently while keeping the header fixed */
-.meetings-table thead,
+/* Make thead and tbody block for independent scrolling */
+.meetings-table {
+  display: flex;
+  flex-direction: column;
+  max-height: 35vh;
+}
+
+.meetings-table thead {
+  display: block;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
 .meetings-table tbody {
   display: block;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  clip-path: inset(0 0 0 0);
 }
 
-.meetings-table thead tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
-
+.meetings-table thead tr,
 .meetings-table tbody tr {
   display: table;
-  table-layout: fixed;
   width: 100%;
+  table-layout: fixed;
 }
 
 /* Status-aware table header (non-transparent solid background matching current status) */
@@ -995,12 +1006,10 @@ footer {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Smooth transform for the scrolling body */
+/* Smooth transform for the scrolling body - no CSS transition, JS handles animation */
 .meetings-table tbody {
   transform: translateY(0);
   will-change: transform;
-  max-height: 28vh;
-  overflow: hidden;
 }
 
 /* Default row height variable (can be overridden by JS) */

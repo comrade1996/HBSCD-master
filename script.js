@@ -40,33 +40,35 @@ document.addEventListener('DOMContentLoaded', () => {
     updateTime();
     setInterval(updateTime, 60000);
 
-    // Table auto-scroll
+    // Table auto-scroll - smooth continuous animation
     (function initTableAutoScroll() {
         const tbody = document.getElementById('meetingsTableBody');
         if (!tbody) return;
 
-        const rows = Array.from(tbody.children);
-        if (rows.length < 2) return;
+        const originalRows = Array.from(tbody.children);
+        if (originalRows.length < 2) return;
 
-        // Clone rows for seamless loop
-        rows.forEach(r => tbody.appendChild(r.cloneNode(true)));
+        // Clone rows multiple times for seamless continuous loop
+        for (let i = 0; i < 3; i++) {
+            originalRows.forEach(r => tbody.appendChild(r.cloneNode(true)));
+        }
 
         const firstRow = tbody.querySelector('tr');
         const rowHeight = firstRow ? firstRow.getBoundingClientRect().height : 50;
+        const totalOriginalHeight = rowHeight * originalRows.length;
 
         let offset = 0;
         let lastTime = performance.now();
-        const SPEED = 20; // px per second
+        const SPEED = 30; // px per second
 
         function step(now) {
             const dt = (now - lastTime) / 1000;
             lastTime = now;
             offset += SPEED * dt;
 
-            if (offset >= rowHeight) {
-                const first = tbody.firstElementChild;
-                if (first) tbody.appendChild(first);
-                offset -= rowHeight;
+            // When we've scrolled past one full set of original rows, reset
+            if (offset >= totalOriginalHeight) {
+                offset = offset - totalOriginalHeight;
             }
 
             tbody.style.transform = `translateY(-${offset}px)`;

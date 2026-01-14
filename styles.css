@@ -946,6 +946,13 @@ footer {
   line-height: 1.4;
 }
 
+.meetings-table .meeting-cell .time-line {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+
 .meetings-table .attendees-cell {
   text-align: center;
   font-weight: 600;

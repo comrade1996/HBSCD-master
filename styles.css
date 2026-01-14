@@ -1002,7 +1002,7 @@ footer {
 }
 
 /* Default row height variable (can be overridden by JS) */
-:root { --meeting-row-height: 3.5rem; --status-header-bg: #10b981; --status-header-color: #ffffff; }
+:root { --meeting-row-height: 3.5rem; --status-header-bg: #00c853; --status-header-color: #ffffff; }
 
 /* Set container to show 7 rows by default */
 .meetings-scroll.show-7-rows {
@@ -1016,8 +1016,9 @@ footer {
 }
 
 .meetings-table tbody {
-  max-height: calc(100vh - 16rem);
+  max-height: calc(100vh - 18rem);
   overflow: hidden;
+  margin-bottom: 1rem;
 }
 
 /* Prevent body scroll */

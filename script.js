@@ -116,9 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const firstRow = tbody.querySelector('tr');
             const rowHeight = firstRow.getBoundingClientRect().height || 40;
 
-            // Set CSS variable to match computed row height so container can show exactly 7 rows
+            // Set CSS variable to match computed row height
             document.documentElement.style.setProperty('--meeting-row-height', `${rowHeight}px`);
-            container.classList.add('meetings-scroll', 'show-7-rows');
+            // Don't add show-7-rows class - let inline styles control height
+            container.classList.add('meetings-scroll');
 
             // Enable auto-scroll by default
             container.classList.add('auto-scroll');

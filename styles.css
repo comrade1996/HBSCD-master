@@ -1011,15 +1011,6 @@ footer {
 }
 
 
-.meetings-table tbody {
-  max-height: 45vh;
-  overflow: hidden;
-}
-
-.meetings-scroll {
-  max-height: 50vh;
-  padding-bottom: 1rem;
-}
 
 /* Prevent body scroll */
 body {

@@ -1010,6 +1010,16 @@ footer {
   height: 100%; /* Fill available space but respect max-height */
 }
 
+/* Ensure meetings-scroll respects flex container height */
+.meetings-scroll {
+  max-height: 100%;
+}
+
+.meetings-table tbody {
+  max-height: calc(100vh - 20rem);
+  overflow: hidden;
+}
+
 @media (max-width: 639px) {
   :root { --meeting-row-height: 2.8rem; }
   .meetings-scroll.show-7-rows { max-height: calc(var(--meeting-row-height) * 7); }

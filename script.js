@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateTime();
     setInterval(updateTime, 60000);
 
-    // Table auto-scroll - smooth continuous animation
+    // Table auto-scroll - continuous carousel inside tbody only
     (function initTableAutoScroll() {
         const tbody = document.getElementById('meetingsTableBody');
         if (!tbody) return;
@@ -48,34 +48,43 @@ document.addEventListener('DOMContentLoaded', () => {
         const originalRows = Array.from(tbody.children);
         if (originalRows.length < 2) return;
 
-        // Clone rows multiple times for seamless continuous loop
-        for (let i = 0; i < 3; i++) {
-            originalRows.forEach(r => tbody.appendChild(r.cloneNode(true)));
+        // Create inner wrapper for the scrolling content
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display: block; will-change: transform;';
+        
+        // Move all rows into wrapper
+        while (tbody.firstChild) {
+            wrapper.appendChild(tbody.firstChild);
         }
+        tbody.appendChild(wrapper);
 
-        const firstRow = tbody.querySelector('tr');
+        // Clone rows for seamless loop
+        const rows = Array.from(wrapper.children);
+        rows.forEach(r => wrapper.appendChild(r.cloneNode(true)));
+
+        const firstRow = wrapper.querySelector('tr');
         const rowHeight = firstRow ? firstRow.getBoundingClientRect().height : 50;
         const totalOriginalHeight = rowHeight * originalRows.length;
 
         let offset = 0;
         let lastTime = performance.now();
-        const SPEED = 30; // px per second
+        const SPEED = 25; // px per second - smooth continuous
 
-        function step(now) {
+        function animate(now) {
             const dt = (now - lastTime) / 1000;
             lastTime = now;
             offset += SPEED * dt;
 
-            // When we've scrolled past one full set of original rows, reset
+            // Seamless reset when one full set scrolls through
             if (offset >= totalOriginalHeight) {
-                offset = offset - totalOriginalHeight;
+                offset -= totalOriginalHeight;
             }
 
-            tbody.style.transform = `translateY(-${offset}px)`;
-            requestAnimationFrame(step);
+            wrapper.style.transform = `translateY(-${offset}px)`;
+            requestAnimationFrame(animate);
         }
 
-        requestAnimationFrame(step);
+        requestAnimationFrame(animate);
     })();
 
     // Set initial hall status to Available
@@ -88,11 +97,11 @@ document.addEventListener('DOMContentLoaded', () => {
             available: {
                 text: 'Available | <span lang="ar" class="arabic">متـــــــاح</span>',
                 icon: 'fa-check',
-                pulseColor: 'bg-green-600',
-                bodyBg: 'linear-gradient(135deg, #10b981 0%, #059669 15%, #047857 30%, #10b981 45%, #065f46 60%, #047857 75%, #064e3b 90%, #10b981 100%)',
+                pulseColor: 'bg-green-500',
+                bodyBg: 'linear-gradient(135deg, #00e676 0%, #00c853 15%, #00e676 30%, #00c853 45%, #00e676 60%, #00c853 75%, #00e676 90%, #00c853 100%)',
                 textColor: '#ffffff',
-                fadeColor: 'rgba(16, 185, 129, 0.35)',
-                headerBg: '#10b981'
+                fadeColor: 'rgba(0, 230, 118, 0.35)',
+                headerBg: '#00e676'
             },
             engaged: {
                 text: 'Engaged | <span lang="ar" class="arabic">مشغول</span>',

@@ -990,7 +990,11 @@ footer {
   flex: 1;
   overflow: hidden;
   position: relative;
-  contain: strict;
+}
+
+/* Remove old tbody transform - wrapper handles animation now */
+.meetings-table tbody > div {
+  position: relative;
 }
 
 .meetings-table thead tr,
@@ -1007,14 +1011,9 @@ footer {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Smooth transform for the scrolling body - no CSS transition, JS handles animation */
-.meetings-table tbody {
-  transform: translateY(0);
-  will-change: transform;
-}
 
 /* Default row height variable (can be overridden by JS) */
-:root { --meeting-row-height: 3.5rem; --status-header-bg: #00c853; --status-header-color: #ffffff; }
+:root { --meeting-row-height: 3.5rem; --status-header-bg: #00e676; --status-header-color: #ffffff; }
 
 /* Set container to show 7 rows by default */
 .meetings-scroll.show-7-rows {

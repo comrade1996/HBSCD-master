@@ -999,6 +999,8 @@ footer {
 .meetings-table tbody {
   transform: translateY(0);
   will-change: transform;
+  max-height: 28vh;
+  overflow: hidden;
 }
 
 /* Default row height variable (can be overridden by JS) */
@@ -1025,9 +1027,6 @@ body {
 
 @media (min-width: 640px) and (max-width: 1023px) {
   :root { --meeting-row-height: 3.2rem; }
-  .meetings-scroll.show-7-rows { max-height: calc(var(--meeting-row-height) * 4) !important; }
-  .meetings-table tbody { max-height: calc(var(--meeting-row-height) * 4) !important; }
-  .meetings-scroll { max-height: calc(var(--meeting-row-height) * 4 + 1rem) !important; }
 }
 
 /* Floating buttons container (right middle) */

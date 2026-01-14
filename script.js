@@ -46,41 +46,31 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!tbody) return;
 
         const originalRows = Array.from(tbody.children);
-        if (originalRows.length < 2) return;
-
-        // Create inner wrapper for the scrolling content
-        const wrapper = document.createElement('div');
-        wrapper.style.cssText = 'display: block; will-change: transform;';
-        
-        // Move all rows into wrapper
-        while (tbody.firstChild) {
-            wrapper.appendChild(tbody.firstChild);
-        }
-        tbody.appendChild(wrapper);
+        const numOriginal = originalRows.length;
+        if (numOriginal < 2) return;
 
         // Clone rows for seamless loop
-        const rows = Array.from(wrapper.children);
-        rows.forEach(r => wrapper.appendChild(r.cloneNode(true)));
+        originalRows.forEach(r => tbody.appendChild(r.cloneNode(true)));
 
-        const firstRow = wrapper.querySelector('tr');
+        const firstRow = tbody.querySelector('tr');
         const rowHeight = firstRow ? firstRow.getBoundingClientRect().height : 50;
-        const totalOriginalHeight = rowHeight * originalRows.length;
+        const totalOriginalHeight = rowHeight * numOriginal;
 
         let offset = 0;
         let lastTime = performance.now();
-        const SPEED = 25; // px per second - smooth continuous
+        const SPEED = 25; // px per second
 
         function animate(now) {
             const dt = (now - lastTime) / 1000;
             lastTime = now;
             offset += SPEED * dt;
 
-            // Seamless reset when one full set scrolls through
+            // Seamless reset
             if (offset >= totalOriginalHeight) {
                 offset -= totalOriginalHeight;
             }
 
-            wrapper.style.transform = `translateY(-${offset}px)`;
+            tbody.style.transform = `translateY(-${offset}px)`;
             requestAnimationFrame(animate);
         }
 

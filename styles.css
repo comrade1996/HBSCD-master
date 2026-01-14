@@ -872,8 +872,28 @@ footer {
 
 /* Modern Meetings Table Styles */
 .meetings-table {
+  display: block;
   border-collapse: separate;
   border-spacing: 0;
+}
+
+.meetings-table thead {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.meetings-table tbody {
+  display: block;
+  will-change: transform;
+}
+
+.meetings-table thead tr,
+.meetings-table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
 
 .meetings-table thead {
@@ -968,40 +988,6 @@ footer {
 .meetings-scroll.auto,
 .meetings-scroll.auto-scroll {
   overflow: hidden;
-}
-
-/* Make thead and tbody block for independent scrolling */
-.meetings-table {
-  display: flex;
-  flex-direction: column;
-  max-height: 35vh;
-  overflow: hidden;
-}
-
-.meetings-table thead {
-  display: block;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 10;
-}
-
-.meetings-table tbody {
-  display: block;
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-}
-
-/* Remove old tbody transform - wrapper handles animation now */
-.meetings-table tbody > div {
-  position: relative;
-}
-
-.meetings-table thead tr,
-.meetings-table tbody tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
 }
 
 /* Status-aware table header (non-transparent solid background matching current status) */

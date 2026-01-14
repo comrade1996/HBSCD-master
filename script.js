@@ -88,10 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 text: 'Available | <span lang="ar" class="arabic">متـــــــاح</span>',
                 icon: 'fa-check',
                 pulseColor: 'bg-green-500',
-                bodyBg: 'linear-gradient(135deg, #00e676 0%, #00c853 15%, #00e676 30%, #00c853 45%, #00e676 60%, #00c853 75%, #00e676 90%, #00c853 100%)',
+                bodyBg: 'linear-gradient(135deg, #00ff7f 0%, #00e676 15%, #00ff7f 30%, #00e676 45%, #00ff7f 60%, #00e676 75%, #00ff7f 90%, #00e676 100%)',
                 textColor: '#ffffff',
-                fadeColor: 'rgba(0, 230, 118, 0.35)',
-                headerBg: '#00e676'
+                fadeColor: 'rgba(0, 255, 127, 0.35)',
+                headerBg: '#00ff7f'
             },
             engaged: {
                 text: 'Engaged | <span lang="ar" class="arabic">مشغول</span>',

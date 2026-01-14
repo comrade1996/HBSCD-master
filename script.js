@@ -104,7 +104,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!table || !tbody || !container) return;
 
             // Ensure at least 8 rows exist (clone if necessary) to make smooth continuous scroll
-            const desiredVisible = 7;
+            // Use fewer rows on tablet/smaller screens
+            const isTablet = window.innerWidth >= 640 && window.innerWidth < 1024;
+            const desiredVisible = isTablet ? 4 : 5;
             const originalRows = Array.from(tbody.children);
             while (tbody.children.length < Math.max(desiredVisible + 1, originalRows.length)) {
                 originalRows.forEach(r => tbody.appendChild(r.cloneNode(true)));

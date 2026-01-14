@@ -1010,15 +1010,15 @@ footer {
   height: 100%; /* Fill available space but respect max-height */
 }
 
-/* Ensure meetings-scroll respects flex container height */
-.meetings-scroll {
-  max-height: 100%;
-}
 
 .meetings-table tbody {
-  max-height: calc(100vh - 18rem);
+  max-height: 45vh;
   overflow: hidden;
-  margin-bottom: 1rem;
+}
+
+.meetings-scroll {
+  max-height: 50vh;
+  padding-bottom: 1rem;
 }
 
 /* Prevent body scroll */
@@ -1034,7 +1034,9 @@ body {
 
 @media (min-width: 640px) and (max-width: 1023px) {
   :root { --meeting-row-height: 3.2rem; }
-  .meetings-scroll.show-7-rows { max-height: calc(var(--meeting-row-height) * 7); }
+  .meetings-scroll.show-7-rows { max-height: calc(var(--meeting-row-height) * 4) !important; }
+  .meetings-table tbody { max-height: calc(var(--meeting-row-height) * 4) !important; }
+  .meetings-scroll { max-height: calc(var(--meeting-row-height) * 4 + 1rem) !important; }
 }
 
 /* Floating buttons container (right middle) */

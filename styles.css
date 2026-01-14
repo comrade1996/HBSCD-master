@@ -1016,8 +1016,14 @@ footer {
 }
 
 .meetings-table tbody {
-  max-height: calc(100vh - 20rem);
+  max-height: calc(100vh - 16rem);
   overflow: hidden;
+}
+
+/* Prevent body scroll */
+body {
+  overflow: hidden;
+  height: 100vh;
 }
 
 @media (max-width: 639px) {

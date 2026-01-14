@@ -975,6 +975,7 @@ footer {
   display: flex;
   flex-direction: column;
   max-height: 35vh;
+  overflow: hidden;
 }
 
 .meetings-table thead {
@@ -989,7 +990,7 @@ footer {
   flex: 1;
   overflow: hidden;
   position: relative;
-  clip-path: inset(0 0 0 0);
+  contain: strict;
 }
 
 .meetings-table thead tr,

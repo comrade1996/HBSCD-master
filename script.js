@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 text: 'Available | <span lang="ar" class="arabic">متـــــــاح</span>',
                 icon: 'fa-check',
                 pulseColor: 'bg-green-500',
-                bodyBg: 'linear-gradient(135deg, #00ff7f 0%, #00e676 15%, #00ff7f 30%, #00e676 45%, #00ff7f 60%, #00e676 75%, #00ff7f 90%, #00e676 100%)',
+                bodyBg: 'linear-gradient(135deg, #10b981 0%, #059669 15%, #047857 30%, #10b981 45%, #065f46 60%, #047857 75%, #064e3b 90%, #10b981 100%)',
                 textColor: '#ffffff',
                 fadeColor: 'rgba(0, 255, 127, 0.35)',
                 headerBg: '#00ff7f'
